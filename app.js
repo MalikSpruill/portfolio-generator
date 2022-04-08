@@ -2,14 +2,6 @@
   const fs = require("fs");
   const generatePage = require("./src/page-template.js");
   
-  // const pageHTML = generatePage(name, github);
-  
-  // fs.writeFile('index.html', pageHTML, err => {
-  //   if (err) throw new Error(err);
-  
-  //   console.log('Portfolio complete! Check out index.html to see the output!');
-  // });
-  
   const promptUser = () => {
     return inquirer.prompt([
       {
@@ -130,9 +122,44 @@
     })
   };
   
+  
   promptUser()
     .then(promptProject)
-    .then(portfolioAnswers => {
-      console.log(portfolioAnswers);
+    .then(portfolioData => {
+      const pageHTML = generatePage(portfolioData);
+  
+      fs.writeFile('index.html', pageHTML, err => {
+        if (err) throw new Error(err);
+     
+        console.log('Portfolio complete! Check out index.html to see the output!');
+      });
+     
     })
     
+
+    /*
+    const mockData = {
+      name: 'Malik',
+      github: 'MalikSpruill',
+      about: "I like to have fun",
+      projects: [
+      {
+        projectName: "Generator",
+        projectType: "Node"
+      }
+      ]
+    };
+
+    const pageHTML = () => {
+      let html = generatePage(mockData);
+
+      fs.writeFile('index.html', html, err => {
+        if (err) throw new Error(err);
+     
+        console.log('Portfolio complete! Check out index.html to see the output!');
+
+    })
+  };
+
+  pageHTML();
+*/
