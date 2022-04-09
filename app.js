@@ -1,6 +1,7 @@
   const inquirer = require("inquirer");
-  const fs = require("fs");
+  const generateSite = require("./utils/generate-site.js");
   const generatePage = require("./src/page-template.js");
+  const {writeFile, copyFile} = generateSite;
   
   const promptUser = () => {
     return inquirer.prompt([
@@ -122,44 +123,22 @@
     })
   };
   
-  
   promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-      const pageHTML = generatePage(portfolioData);
-  
-      fs.writeFile('index.html', pageHTML, err => {
-        if (err) throw new Error(err);
-     
-        console.log('Portfolio complete! Check out index.html to see the output!');
-      });
-     
-    })
+  .then(promptProject)
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
+  });
     
-
-    /*
-    const mockData = {
-      name: 'Malik',
-      github: 'MalikSpruill',
-      about: "I like to have fun",
-      projects: [
-      {
-        projectName: "Generator",
-        projectType: "Node"
-      }
-      ]
-    };
-
-    const pageHTML = () => {
-      let html = generatePage(mockData);
-
-      fs.writeFile('index.html', html, err => {
-        if (err) throw new Error(err);
-     
-        console.log('Portfolio complete! Check out index.html to see the output!');
-
-    })
-  };
-
-  pageHTML();
-*/
